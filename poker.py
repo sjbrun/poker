@@ -8,7 +8,6 @@ the best possible category.
 import json
 import sys
 
-
 # Valid suits
 SUITS = ('H', 'C', 'D', 'S')
 
@@ -42,11 +41,11 @@ class Card(object):
         assert isinstance(string, str), 'Card object input must be type string'
         assert string[-1] in SUITS, string + ' is not a valid card'
         self.suit = string[-1]
-        if '10' in string: ## special handling for ten card due to string length
+        if '10' in string:  # special handling for ten card due to string length
             assert len(string) == 3, string + ' is not a valid card'
             assert string[0:-1] in RANK_ORDER_ASC, string + ' is not a valid card'
             self.rank = string[0:-1]
-        else:  ## all non-ten value cards
+        else:  # all non-ten value cards
             assert len(string) == 2, string + ' is not a valid card'
             assert string[0] in RANK_ORDER_ASC, string + ' is not a valid card'
             self.rank = string[0]
@@ -65,7 +64,7 @@ class PokerHand(object):
                        details
 
     Args:
-        None (method "add_cards" loads hand with cards)
+        none (method "add_cards" loads hand with cards)
 
     Attributes:
         rank_counts (dict): Stores the count of each card rank present in hand
@@ -115,7 +114,7 @@ class PokerHand(object):
         elif self.is_straight_flush():
             category = 'straight flush: ' + self.find_max_rank() + ' high'
         elif self.is_four_of_a_kind():
-            category = 'four of a kind: ' + self.find_four_card_rank() + 's ' +  \
+            category = 'four of a kind: ' + self.find_four_card_rank() + 's ' + \
                        'with ' + self.find_single_card_ranks() + ' kicker'
         elif self.is_full_house():
             category = 'full house: ' + self.find_three_card_rank() + 's ' + \
@@ -198,7 +197,7 @@ class PokerHand(object):
 
     def find_max_rank(self):
         """ Returns: Maximum card rank present in hand (e.g. - 'A') """
-        return RANK_NAMES[self.cards[-1].rank]  ## assumes cards are sorted
+        return RANK_NAMES[self.cards[-1].rank]  # assumes cards are sorted
 
     def find_four_card_rank(self):
         """ Returns: Card rank of 4-of-a-kind or None if not found. """
@@ -224,7 +223,7 @@ class PokerHand(object):
         for rank in self.rank_counts:
             if self.rank_counts[rank] == 2:  # a pair for that rank exists
                 pair_ranks.append(rank)
-        if pair_ranks: # list is not empty
+        if pair_ranks:  # list is not empty
             return ' '.join([RANK_NAMES[rank] for rank in sorted_ranks_desc(pair_ranks)])
         return None
 
@@ -238,7 +237,7 @@ class PokerHand(object):
         return ' '.join([RANK_NAMES[rank] for rank in sorted_ranks_desc(single_ranks)])
 
 
-## Rank sorting helper function
+# Rank sorting helper function
 def sorted_ranks_desc(list_of_ranks):
     """ Sorts input list of ranks by rank descending
         (helper for tie breaking kicker details)
@@ -249,18 +248,19 @@ def sorted_ranks_desc(list_of_ranks):
     return sorted(list_of_ranks, key=lambda rank: RANK_ORDER_DESC.index(rank))
 
 
-## Functions for main()
+# Functions for main()
 def get_user_input():
     """ Prompts user for input, if blank --> system exit
     Returns: user_input (string): Raw user input string
     """
-    user_input = input('\nEnter a JSON array of 5 cards ' + \
-                       '(e.g. - ["10S", "10H", "QH", "QS", "QD"]) ' + \
+    user_input = input('\nEnter a JSON array of 5 cards ' +
+                       '(e.g. - ["10S", "10H", "QH", "QS", "QD"]) ' +
                        'or press enter to quit: \n')
     if user_input == "":
         sys.exit()
     else:
         return user_input
+
 
 def load_json_array(user_input):
     """ Attempts to read user input as a list of poker cards
@@ -275,18 +275,19 @@ def load_json_array(user_input):
     try:
         card_list = json.loads(user_input)
     except ValueError:  # includes json.decoder.JSONDecodeError
-        print('\nDecoding JSON array failed. JSON array must be ' + \
-              'be bounded by brackets and include double quoted elements ' + \
+        print('\nDecoding JSON array failed. JSON array must be ' +
+              'be bounded by brackets and include double quoted elements ' +
               '(e.g. - ["10H", "JH", "QH", "KH", "AH"]).\n\n')
         sys.exit()
     try:
         assert isinstance(card_list, list)
     except AssertionError:
-        print('\nValid JSON, but not an array. JSON array must be ' + \
-              'be bounded by brackets and include double quoted elements ' + \
+        print('\nValid JSON, but not an array. JSON array must be ' +
+              'be bounded by brackets and include double quoted elements ' +
               '(e.g. - ["10H", "JH", "QH", "KH", "AH"]).\n\n')
         sys.exit()
     return card_list
+
 
 def build_hand_and_analyze(card_list):
     """ Attempts to build PokerHand from input list of cards and

@@ -1,16 +1,15 @@
 #!/usr/bin/python3
 
+"""
+This test module contains tests on the Card class
+and its associated methods.
+"""
+
 import pytest
 from poker import Card
 
 
-"""
-This test module contains tests on the Card class
-and its associated methods. 
-"""
-
-
-## Valid card tests
+# Valid card tests
 @pytest.mark.parametrize("string, expected_rank, expected_suit", [
     # Hearts
     ('2H', '2', 'H'),
@@ -73,33 +72,33 @@ and its associated methods.
     ('AS', 'A', 'S')
 ])
 def test_valid_cards(string, expected_rank, expected_suit):
-    """ Test valid card string representation is created as 
+    """ Test valid card string representation is created as
     a Card instance with the correct rank and suit attributes """
     card = Card(string)
     assert card.rank == expected_rank
     assert card.suit == expected_suit
 
 
-## Invalid card tests
+# Invalid card tests
 @pytest.mark.parametrize("string", [
-    66,     # type invalid
-    3.1,    # type invalid
-    [],     # type invalid
-    {},     # type invalid
-    'XX',   # rank and suit invalid
-    'XXX',  # len, rank, and suit invalid 
-    'ZZZZ', # len, rank, and suit invalid
-    '1H',   # rank invalid
-    '0S',   # rank invalid
+    66,  # type invalid
+    3.1,  # type invalid
+    [],  # type invalid
+    {},  # type invalid
+    'XX',  # rank and suit invalid
+    'XXX',  # len, rank, and suit invalid
+    'ZZZZ',  # len, rank, and suit invalid
+    '1H',  # rank invalid
+    '0S',  # rank invalid
     '11D',  # rank invalid
-    '2Z',   # suit invalid
-    'Q!',   # suit invalid
-    'C3',   # rank and suit flipped
+    '2Z',  # suit invalid
+    'Q!',  # suit invalid
+    'C3',  # rank and suit flipped
     '10Q',  # ten - rank valid, suit invalid
-    'H10'   # ten - rank and suit flipped
+    'H10'  # ten - rank and suit flipped
 ])
 def test_invalid_cards(string):
-    """ Test assertion error raised for 
+    """ Test assertion error raised for
     invalid card string representation """
     with pytest.raises(AssertionError):
-        card = Card(string)
+        Card(string)
